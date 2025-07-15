@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор напряжений</title>
+    <style>
+        *, html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        main {
+            background-color: #111;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            padding: 15px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-size: clamp(18px, 4vw, 24px);
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            text-align: center;
+        }
+
+        .voltage-table {
+            width: 100%;
+            margin-bottom: 15px;
+            border-collapse: collapse;
+            font-size: clamp(12px, 3vw, 16px);
+        }
+
+        .voltage-table th, .voltage-table td {
+            border: 1px solid #0f0;
+            padding: 8px 5px;
+            text-align: center;
+        }
+
+        .voltage-table th {
+            background-color: #222;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            padding: 10px 5px;
+        }
+
+        .voltage-table input {
+            width: 100%;
+            background-color: #000;
+            color: #0f0;
+            border: 1px solid #0f0;
+            padding: 5px;
+            text-align: center;
+            outline: none;
+            font-size: clamp(12px, 3vw, 16px);
+        }
+
+        .voltage-table input:focus {
+            box-shadow: 0 0 5px #0f0;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background-color: #0f0;
+            margin: 15px 0;
+            opacity: 0.3;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        button {
+            padding: 12px 5px;
+            font-size: clamp(12px, 3vw, 16px);
+            color: #000;
+            background-color: #0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            box-shadow: 0 0 5px #0f0;
+        }
+
+        @media (max-width: 480px) {
+            button {
+                padding: 10px 3px;
+            }
+        }
+
+        button:hover {
+            background-color: #0f0;
+            box-shadow: 0 0 15px #0f0;
+            transform: translateY(-2px);
+        }
+
+        .clear {
+            background-color: #f00;
+            color: #fff;
+            box-shadow: 0 0 5px #f00;
+            grid-column: span 4;
+        }
+
+        .clear:hover {
+            box-shadow: 0 0 15px #f00;
+        }
+
+        /* Мобильная адаптация таблицы */
+        @media (max-width: 480px) {
+            .voltage-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .voltage-table th, .voltage-table td {
+                padding: 6px 3px;
+            }
+            
+            .voltage-table input {
+                padding: 3px;
+            }
+        }
+
+        /* Ландшафтная ориентация на мобильных */
+        @media (max-height: 480px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+            }
+            
+            main {
+                padding: 10px;
+            }
+            
+            .voltage-table th, .voltage-table td {
+                padding: 4px 2px;
+            }
+            
+            button {
+                padding: 8px 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Калькулятор напряжений</h1>
+        
+        <table class="voltage-table">
+            <thead>
+                <tr>
+                    <th>Напряжение (В)</th>
+                    <th>Ток (А)</th>
+                    <th>Мощность (Вт)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>35</td>
+                    <td><input type="number" id="current-35" placeholder="Ток" oninput="calculatePower(35, 'current-35', 'power-35')"></td>
+                    <td><input type="number" id="power-35" placeholder="Мощность" oninput="calculateCurrent(35, 'power-35', 'current-35')"></td>
+                </tr>
+                <tr>
+                    <td>110</td>
+                    <td><input type="number" id="current-110" placeholder="Ток" oninput="calculatePower(110, 'current-110', 'power-110')"></td>
+                    <td><input type="number" id="power-110" placeholder="Мощность" oninput="calculateCurrent(110, 'power-110', 'current-110')"></td>
+                </tr>
+                <tr>
+                    <td>150</td>
+                    <td><input type="number" id="current-150" placeholder="Ток" oninput="calculatePower(150, 'current-150', 'power-150')"></td>
+                    <td><input type="number" id="power-150" placeholder="Мощность" oninput="calculateCurrent(150, 'power-150', 'current-150')"></td>
+                </tr>
+                <tr>
+                    <td>220</td>
+                    <td><input type="number" id="current-220" placeholder="Ток" oninput="calculatePower(220, 'current-220', 'power-220')"></td>
+                    <td><input type="number" id="power-220" placeholder="Мощность" oninput="calculateCurrent(220, 'power-220', 'current-220')"></td>
+                </tr>
+                <tr>
+                    <td>330</td>
+                    <td><input type="number" id="current-330" placeholder="Ток" oninput="calculatePower(330, 'current-330', 'power-330')"></td>
+                    <td><input type="number" id="power-330" placeholder="Мощность" oninput="calculateCurrent(330, 'power-330', 'current-330')"></td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td><input type="number" id="current-500" placeholder="Ток" oninput="calculatePower(500, 'current-500', 'power-500')"></td>
+                    <td><input type="number" id="power-500" placeholder="Мощность" oninput="calculateCurrent(500, 'power-500', 'current-500')"></td>
+                </tr>
+                <tr>
+                    <td>750</td>
+                    <td><input type="number" id="current-750" placeholder="Ток" oninput="calculatePower(750, 'current-750', 'power-750')"></td>
+                    <td><input type="number" id="power-750" placeholder="Мощность" oninput="calculateCurrent(750, 'power-750', 'current-750')"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="divider"></div>
+
+        <div class="buttons">
+            <button class="clear" onclick="clearAll()">Очистить все</button>
+        </div>
+    </main>
+    <script>
+        function calculatePower(voltage, currentId, powerId) {
+            const currentInput = document.getElementById(currentId);
+            const powerInput = document.getElementById(powerId);
+            
+            if (currentInput.value && !isNaN(currentInput.value)) {
+                const current = parseFloat(currentInput.value);
+                const power = voltage * current;
+                powerInput.value = power.toFixed(2);
+            } else {
+                powerInput.value = '';
+            }
+        }
+
+        function calculateCurrent(voltage, powerId, currentId) {
+            const powerInput = document.getElementById(powerId);
+            const currentInput = document.getElementById(currentId);
+            
+            if (powerInput.value && !isNaN(powerInput.value)) {
+                const power = parseFloat(powerInput.value);
+                const current = power / voltage;
+                currentInput.value = current.toFixed(2);
+            } else {
+                currentInput.value = '';
+            }
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('.voltage-table input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                clearAll();
+            }
+        });
+
+        // Автоматический фокус на первом поле ввода при загрузке
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstInput = document.querySelector('.voltage-table input');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
